@@ -10,8 +10,7 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 
-const uri =
-  `mongodb+srv://brandOwner:HrON2OEyZ0ncl8ZE@cluster0.d9lmwal.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS}@cluster0.d9lmwal.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -39,6 +38,19 @@ const run = async () => {
       const newBrand = req.body;
       console.log(newBrand);
       const result = await brandCollection.insertOne(newBrand);
+      res.send(result);
+    });
+
+    app.get("/brand/:brandName", async (req, res) => {
+      const brands = req.params.brandName;
+      const query = { brandName: brands };
+      const result = await brandCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.get("/brand", async (req, res) => {
+      const brands = brandCollection.find();
+      const result = await brands.toArray();
       res.send(result);
     });
 
