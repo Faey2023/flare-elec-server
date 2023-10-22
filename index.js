@@ -54,7 +54,7 @@ const run = async () => {
       const result = await brands.toArray();
       res.send(result);
     });
-    
+
     //view details
     app.get("/brand/:brandName/:id", async (req, res) => {
       const id = req.params.id;
@@ -62,6 +62,40 @@ const run = async () => {
       const result = await brandCollection.findOne(query);
       res.send(result);
     });
+
+    //update
+    app.get("/brand/:brandName/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await brandCollection.findOne(query);
+      res.send(result);
+    });
+    //update
+    app.put("/brand/:brandName/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedProduct = req.body;
+      const newProduct = {
+        $set: {
+          image: updatedProduct.image,
+          name: updatedProduct.name,
+          brandName: updatedProduct.brandName,
+          type: updatedProduct.type,
+          price: updatedProduct.price,
+          rating: updatedProduct.rating,
+          details: updatedProduct.details,
+        },
+      };
+      const result = await brandCollection.updateOne(
+        filter,
+        newProduct,
+        options
+      );
+      res.send(result);
+    });
+
+    //add to cart
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
