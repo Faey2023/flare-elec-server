@@ -1,10 +1,10 @@
 const express = require("express");
-const cors = require("cors");
 const app = express();
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const cors = require("cors");
 const dotenv = require("dotenv");
-const port = process.env.PORT || 5000;
 dotenv.config();
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const port = process.env.PORT || 5000;
 
 //middleware
 app.use(cors());
@@ -24,7 +24,7 @@ const client = new MongoClient(uri, {
 const run = async () => {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const brandCollection = client.db("brandDB").collection("brand");
     // set data
